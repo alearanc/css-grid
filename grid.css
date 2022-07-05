@@ -1,0 +1,537 @@
+/*******************
+GRID CSS
+********************
+    Grid CSS es un sistema de maquetacin bidimensional.
+
+    Pensado para planificar las estructuras y secciones que definen las
+    interfaces principales de sitios y aplicaciones web.
+
+    Flexbox es un sistema unidimensional, se tienen filas o columnas,
+    pero no ambas. Es ideal para acomodar elementos en línea.
+    Grid permite trabajar con filas y columnas al mismo tiempo.
+
+    Flexbox es excelente para el acomodo interno de los elementos de un
+    componente de interfaz como Cards, Modals, Buttons, Forms, Menus,
+    etc. 
+*/
+
+/********************
+Conceptos Básicos
+---------------------
+- Contenedor padre (Grid Container)
+- Elementos Hijos (Grid Items)
+- Lineas de Cuadrícula (Grid Lines)
+- Pista de Cuadrícula - (Grid Track - Row | Column)
+- Celda de Cuadrícula (Grid Cell)
+- Área de Cuadrícula (Grid Area)
+*/
+
+
+html {
+    box-sizing: border-box;
+    font-size: 16px;
+    font-family: sans-serif;
+    scroll-behavior: smooth;
+}
+
+*,
+*::after,
+*::before {
+    box-sizing: inherit;
+}
+
+a[href="#top"] {
+    margin: 1rem;
+    display: block;
+    font-size: 2rem;
+    text-align: center;
+    text-decoration: none;
+}
+
+p {
+    margin: 0;
+}
+
+h2 {
+    margin-top: 50vh;
+    text-align: center;
+}
+
+img {
+    margin: auto;
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.menu {
+    margin-bottom: 100vh;
+    font-size: 125%;
+}
+
+.menu li {
+    margin-bottom: 1rem;
+}
+
+.container {
+    margin: 0 auto;
+    width: 80%;
+    height: 80vh;
+    background-color: #222;
+    border: medium solid #000;
+}
+
+.item {
+    padding: 1rem;
+    font-size: 1.25rem;
+    background-color: #666;
+    border: medium solid #999;
+}
+
+/**********************************
+Propiedades del Contenedor Padre
+-----------------------------------
+display: inline-grid;
+---------------------
+El elemento se define como un contenedor grid en línea. Se comporta como un
+elemento de línea. Al suceder esto, y por ser un elemento inline, no se le
+pueden aplicar margenes a los lados, entonces se situa al principio de la
+línea predeterminadamente.
+
+Se puede utilizar para situar dos elementos grids uno al lado del otro.
+
+display: grid;
+--------------
+El elemento se define como un contenedor grid. Se comporta como un elemento
+de bloque. Sus elementos hijos se convertirán en grid items.
+
+grid-row-gap: 0;
+----------------
+Define la distancia entre las filas de un grid container.
+
+0       -   Elimina la distancia.
+10px    -   Se pueden utilizar valores en pixeles.
+3rem    -   Se pueden utilizar rems.
+
+grid-column-gap: 0;
+-------------------
+Define la distancia entre las columnas de un grid container.
+
+0       -   Elimina la distancia
+10px    -   Se pueden utilizar valores en pixeles.
+3rem    -   Se pueden utilizar rems.
+20%     -   Se pueden utilizar porcentajes.
+
+grid-gap: 0 0;
+--------------
+Es un shorthand para las propiedades grid-row-gap y grid-column-gap.
+Primer valor para rows y segundo valor para columns.
+----------------------------------------------------------------------------
+Grid Explícita
+
+grid-template-columns: none;
+----------------------------
+Define las columnas del grid container. Se puede especificar el width de una
+columna usando la keyword auto o una longitud (10px por ejemplo). El número
+de columnas es determinado por el número de valores definidos separados por
+un espacio en blanco entre sí.
+
+none    -   Predeterminado. No hay columnas definidas, sólo se tiene una.
+auto auto auto  -   Define 3 columnas que se redimensionarán automáticamente.
+80px auto 1rem  -   Se pueden mezclar valores.
+40px 1fr 2fr    -   Se puede usar la unidad flex fr para distribuir el
+                    espacio sobrante.
+
+grid-template-rows: none;
+-------------------------
+Define las filas del grid container. Como con grid-template-columns, se
+puede especificar el width de cada una. Aplican las mismas reglas.
+----------------------------------------------------------------------------
+*/
+
+.grid-explicit {
+    display: grid;
+    /*Al definir una grid de 3x3, a partir de la celda 10 no están
+definidas. Se adaptan al tamaño automático.
+*/
+    grid-template-columns: 50% 100px 1fr;
+    grid-template-rows: 2rem 20vh 30%;
+    /* grid de 5*4 */
+    grid-template-columns: repeat(5, 20%);
+    grid-template-rows: repeat(4, auto);
+    /*Rara vez se establece un valor epecífico a columnas, generalmente
+    se usa el automatico, dependiendo del tamaño de las columnas.*/
+    grid-template-rows: repeat(4, 25%);
+    /*La fraccion es proporcional al espacio sobrante*/
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    /* grid de 4x5 */
+    grid-template-columns: 20% repeat(2, 30%) 20%;
+    grid-template-rows: repeat(5, auto);
+    /*
+    cuando se aplica gap hay que tener en consideracion que el contenido
+    se puede desbordar
+    */
+    grid-row-gap: 1rem;
+    grid-column-gap: 2rem;
+    /*SHORTHAND para grid-row-gap y grid-column-gap (obsoletos los 3)*/
+    grid-gap: 100px 0px;
+    /* la W3C aconseja usar gap */
+    column-gap: 4rem;
+    row-gap: 2rem;
+    gap: 1vh 1vw;
+    gap: 0;
+}
+
+/*
+----------------------------------------------------------------------------
+Posicionamiento con Grid Lines
+
+grid-row-start: auto;
+---------------------
+Define la posición inicial de fila de un grid item.
+
+Suponiendo una configuración de 3 columnas:
+
+auto    -   Predeterminado. El grid item se coloca automáticamente en la
+            primera fila.
+2       -   El item se coloca en la segunda fila.
+3       -   El item se coloca en la tercera fila.
+
+grid-row-end: auto;
+-------------------
+Define la posición final de fila de un grid item.
+
+Suponiendo una configuracion de 2 filas y 3 columnas:
+
+auto    -   Predeterminado. El grid item se coloca automáticamente.
+3       -   El item finaliza justo antes de la tercer fila.
+4       -   El item finaliza justo antes de la cuarta fila, lo que crea
+            automáticamente una tercera fila.
+
+grid-column-start:auto;
+-----------------------
+Define la posición inicial de columna de un grid item.
+
+Suponiendo una configuración de 3 columnas:
+
+auto    -   Predeterminado. El item es colocado automáticamente.
+2       -   El item se coloca en la segunda columna.
+4       -   El item es colocado fuera de la cuadrícula, en una cuarta
+            columna auto-generada.
+
+grid-column-end: auto;
+----------------------
+Define la posición final de columna de un grid item.
+
+Suponiendo una configuración de 3 columnas:
+
+auto    -   Predeterminado. El item es colocado automáticamente.
+2       -   El item finaliza justo antes de la segunda columna.
+1       -   El item finaliza justo antes de la primera columna, lo que crea
+            automáticamente una cuarta columna.
+
+grid-row: auto auto;
+--------------------
+Es un shorthand para las propiedades grid-row-start y grid-row-end.
+
+auto auto   -   El inicio y final de la fila en fila del item son
+                establecidos automáticamente.
+1 / 3       -   El item comienza antes de la primera fila y termina justo
+                antes de la tercera.
+span 3      -   El  grid item abarca 3 filas.
+1 / span 4  -   Los grid items comienzan antes de la primer fila y se ex-
+                tienden por 4 filas, creando una nueva.
+header      -   Se puede usar un nombre de área para "copiar" sus posi-
+                ciones de inicio y fin.
+
+grid-column: auto auto;
+-----------------------
+Es un shorthand para las propiedades grid-column-start y grid-column-end.
+
+Aplican las mismas reglas que en grid-row.
+
+grid-area: auto;
+----------------
+Es un shorthand para las propiedades grid-row-start, grid-row-end,
+grid-column-start y grid-column-end. Por lo tanto, también es un shorthand
+para grid-row y grid-column.
+
+auto    -   El comienzo y final del grid item son definidos automáticamente.
+main    -   Se puede usar el nombre de un área.
+2 / 3 / 3 / 5   ->  Son los valores de:
+            grid-row-start / grid-row-end / grid-column-start / grid-column-end.
+*/
+
+.grid-explicit .item:nth-child(10) {
+    color: cyan;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row: 2 / 3;
+    /*Combinando celdas*/
+    grid-column: 3 / 5;
+    grid-area: 2 / 3 / 3 / 5;
+}
+
+.grid-explicit .item:nth-child(12) {
+    color: cyan;
+    grid-row: span 2;
+    grid-column: span 3;
+}
+
+.grid-explicit .item:nth-child(15) {
+    color: cyan;
+    grid-row: 1 / span 2;
+    grid-column: 1 / span 2;
+}
+
+/*
+----------------------------------------------------------------------------
+Posicionamiento con nombres de Grid Lines
+
+No funciona el shorthand grid-area.
+
+Sintaxis:
+---------
+    [nombre-linea-1] size1 [nombre-linea2] size2
+*/
+
+.grid-line-names {
+    display: grid;
+    /* Grid de 3x3 */
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: [linea-c1] 1fr [linea-c2] 1fr [linea-c3] 1fr [linea-c4];
+    grid-template-rows: [linea-r1] auto [linea-r2] auto [linea-r3] auto[linea-r4];
+}
+
+.grid-line-names .item:nth-child(3) {
+    color: cyan;
+    grid-row: linea-r3 / linea-r4;
+    grid-column: linea-c1 / linea-c4;
+    /* grid-area: linea-r3 / linea-r4 / linea-c1 / linea-c4; 
+    rompe la grid
+*/
+}
+
+.grid-areas {
+    display: grid;
+    /* Grid de 2x3 */
+    grid-template-columns: 1fr 200px;
+    grid-template-rows: 100px 1fr 60px;
+    /* 4 filas de 100px, 1fr, 1fr, 60px */
+    grid-template-rows: 100px repeat(2, 1fr) 60px;
+    grid-template-areas:
+        "header header"
+        "content sidebar"
+        /* con . indico que quiero una celda vacía */
+        "content ."
+        "footer footer";
+}
+
+.header {
+    grid-area: header;
+}
+
+.content {
+    grid-area: content;
+}
+
+.sidebar {
+    grid-area: sidebar;
+}
+
+.footer {
+    grid-area: footer;
+}
+
+/*
+----------------------------------------------------------------------------
+Grid Implícita - Grids en línea y Grids en bloque
+
+Es la grid que no tenemos en cuenta a la hora de definir las
+grid-template-columns y grid-template-rows, pero que igualmente se dibuja.
+Es decir, van a tomar el valor automático, intentando ajustarse al contene-
+dor padre.
+
+display: inline-grid;
+---------------------
+El elemento se define como un contenedor grid en línea. Se comporta como un
+elemento de línea. Al suceder esto, y por ser un elemento inline, no se le
+pueden aplicar margenes a los lados, entonces se situa al principio de la
+línea predeterminadamente.
+
+Se puede utilizar para situar dos elementos grids uno al lado del otro.
+*/
+
+.grid-implicit {
+    display: inline-grid;
+    display: grid;
+    /* Grid de 4x3 */
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 200px);
+}
+
+/*
+----------------------------------------------------------------------------
+Flujo de la Grid
+
+En flexbox tenemos un flujo de filas o columnas, dependiendo del valor de la
+propiedad flex-direction, ya es un sistema unidimensional.
+
+En el caso de grid, también hay un flujo de filas y columnas. Por defecto,
+el comportamiento de grid es generar filas. Sin embargo, también se puede
+invertir el flujo.
+
+Al cambiar el flujo de la grid, podemos hacer que la grid implícita genere
+columnas adicionales en lugar de filas.
+
+grid-auto-flow: row;
+--------------------
+Define la posición de los grid items auto-generados.
+
+row -   Predeterminado. Suponiendo una configuración de dos columnas, el se-
+        gundo grid item tiene dos columnas de ancho, el tercer elemento tie-
+        ne cuatro filas de alto.
+
+column  -   Los otros elementos de la cuadrícula se colocan en columnas adi-
+            cionales.
+
+dense   -   El algoritmo dense intenta colocar todos los demás elementos de
+            la cuadrícula para llenar todos los huecos de la grid.
+
+grid-auto-rows: auto;
+---------------------
+Define el tamaño de las filas de la grid que se crearon implícitamente: sig-
+nifica que grid-auto-rows apunta a las filas que no se definieron con
+grid-template-rows o grid-template=areas.
+
+auto    -   Predeterminado. Las filas creadas implícitamente tienen un tama-
+            ño auto.
+
+100px   -   Suponiendo una combinación:
+                grid-template-areas:    "header header header"
+                                        "sidebar main main"
+                                        "footer footer footer";
+            con grid-template-rows: 50px 200px;
+
+            En esta situación, grid-template-areas define 3 filas, mientras
+            que grid-template-rows solo define 2 alturas de fila. Como
+            resultado, la altura de la tercera fila (footer) toma su valor
+            de la propiedad grid-auto-rows: 100px.
+
+grid-auto-columns: auto;
+------------------------
+Define el tamaño de las columnas de la grid que se crearon implícitamente:
+esto significa que grid-auto-columns apunta a las columnas que no se defi-
+nieron con grid-template-columns o grid-template-areas.
+
+auto    -   Predeterminado. Las columnas creadas implícitamente tienen un 
+            tamaño auto.
+
+100px   -   Suponiendo una combinación:
+                grid-template-areas:    "header header header"
+                                        "sidebar main main";
+            con grid-template-columns: 50px 200px.
+
+            En esta situación, grid-template-areas define 3 columnas, mien-
+            tras que grid-template-columns solo define 2 anchos de columna.
+            Como resultado, el ancho de la tercera columna toma su valor de
+            la propiedad grid-auto-columns: 100px.
+
+grid-auto-flow: row;
+--------------------
+Define la posición de los items auto-generado.
+
+Cuando el flujo está en fila, grid css va a generar tantas filas implícita-
+mente como lo requiera y va a respetar la cantidad de columnas.
+
+Cuando el flujo está en columna, grid css va a generar tantas columnas implí-
+citamente como lo requiera, respetando la cantidad de filas.
+
+row     -   Predeterminado. En una configuración de dos columnas, el segundo
+            grid item tiene un ancho de dos columnas. El tercer item tiene
+            una altura de 4 filas. Los otros grid items son colocados en
+            filas adicionales.
+
+column  -   Los otros grid items son colocados en columnas adicionales.
+
+dense   -   El algoritmo dense intenta colocar todos los otros items en
+            orden para llenar los "huecos" en la grid.
+*/
+
+.grid-flow {
+    display: grid;
+    /* Grid de 5x3 */
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 150px);
+    /* La grid implicita rellena una cuarta fila utilizando el resto de la
+    altura
+    */
+    grid-auto-flow: row;
+    grid-auto-rows: 100px;
+    grid-auto-flow: column;
+    grid-auto-columns: 50px;
+}
+
+.grid-flow-dense {
+    display: grid;
+    /* Grid de 5x4 */
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 200px);
+    grid-auto-flow: row;
+    /* Aprovecha los espacios en blanco entre los items. */
+    grid-auto-flow: row dense;
+    grid-auto-flow: column dense;
+}
+
+/* .grid-flow-dense .item:nth-child(9) {
+    color: cyan;
+    grid-row: span 3;
+    grid-column: span 3;
+} */
+
+.grid-flow-dense .item:nth-child(11) {
+    color: cyan;
+    grid-row: span 3;
+    grid-column: span 3;
+}
+
+.grid-layers {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-layers .item:nth-child(1) {
+    background-color: #dbea33;
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+}
+
+.grid-layers .item:nth-child(2) {
+    background-color: #497af8;
+    grid-column: 3 / 5;
+    grid-row: 1 / 3;
+}
+
+.grid-layers .item:nth-child(3) {
+    background-color: #90e971;
+    grid-column: 1 / 3;
+    grid-row: 3 / 5;
+}
+
+.grid-layers .item:nth-child(4) {
+    background-color: rgb(250, 149, 7);
+    grid-column: 3 / 5;
+    grid-row: 3 / 5;
+}
+
+.grid-layers .item:nth-child(5) {
+    background-color: #90e;
+    grid-column: 2 / 4;
+    grid-row: 2 / 4;
+    opacity: 75%;
+}
