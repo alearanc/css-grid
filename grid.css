@@ -88,6 +88,12 @@ img {
     border: medium solid #999;
 }
 
+.sub-item {
+    padding: 1rem;
+    border: medium solid #ccc;
+    background-color: #ddd;
+}
+
 /**********************************
 Propiedades del Contenedor Padre
 -----------------------------------
@@ -534,4 +540,236 @@ dense   -   El algoritmo dense intenta colocar todos los otros items en
     grid-column: 2 / 4;
     grid-row: 2 / 4;
     opacity: 75%;
+}
+
+/*
+----------------------------------------------------------------------------
+Orden y Alineación de Grid Items
+
+order: 0;
+---------
+Define el orden de un flexbox item, pero también aplica en CSS Grid.
+
+0   -   Predeterminado. El orden de los items es definido en el código HTML.
+
+1   -   El orden es relativo a los hermanos del item. El orden final es de-
+        finido cuando se tienen en cuenta todos los valores del orden de los
+        items individuales.
+
+-1  -   Se pueden usar valores negativos.
+
+9   -   Se pueden definir diferentes valores para cada item.
+
+justify-items: stretch;
+-----------------------
+Define la alineación predeterminada de los items respecto del eje X del con-
+tenedor.
+
+stretch -   Predeterminado. Se estiran para ocupar todo el tamaño que les
+            corresponde en el eje x.
+start   -   El item se va al inicio de la columna.Sólo ocupa el espacio que
+            necesita su contenido (Grid Item $) más su padding.
+end     -   Igual que start pero al final de la columna.
+center  -   Todas las celdas están centradas respecto de su columna (eje y).
+            Ocupan el espacio de su contenido más su padding.
+
+align-items: stretch;
+---------------------
+Define la alineación respecto del eje Y dentro del contenedor.
+
+stretch -   Se estira para ocupar todo el espacio respecto del eje transver-
+            sal.
+start   -   Análogo a justify-items pero en el eje transversal.
+end     -   Análogo a justify-items pero en el eje transversal.
+center  -   Análogo a justify-items pero en el eje transversal.
+
+*/
+
+.grid-order {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+}
+
+.grid-order .item:nth-child(1) {
+    order: 1;
+}
+
+.grid-order .item:nth-child(2) {
+    order: 2;
+}
+
+.grid-order .item:nth-child(5) {
+    order: -1;
+}
+
+.grid-align {
+    display: grid;
+    /* Grid de 2x3 */
+    grid-template-columns: repeat(3, 200px);
+    grid-template-rows: repeat(2, 200px);
+    align-items: center;
+    justify-items: center;
+}
+
+.grid-align .item:nth-child(4) {
+    align-self: start;
+    justify-self: start;
+}
+
+/* 
+----------------------------------------------------------------------------
+Alineación de Grid Tracks
+
+justify-content: start;
+-----------------------
+Define como son alineados los grid items, respecto del eje X, dentro de un 
+grid container.
+
+start           -   Los grid items son colocados al inicio del eje X del grid
+                    container.
+end             -   Los grid items son colocados al final del eje X del grid
+                    container.
+center          -   Los grid items son centrados respecto del eje X del grid
+                    container.
+space-between   -   El espacio sobrante es distribuido entre los grid items.
+space-around    -   El espacio sobrante se distribuye alrededor de los
+                    items: esto agrega espacios antes del primer elemento y
+                    después del último.
+space-evenly    -   El espacio sobrante es distribuido tanto alrededor como
+                    entre los items.
+
+align-content: ;
+Define la alineación de los tracks de la grid respecto del eje Y.
+
+start           -   Alinea los grid items en el margen top.
+end             -   Alinea los grid items en el margen bottom.
+center          -   Alinea los grid items en el centro.
+space-between   -   Distribuye los espacios entre los grid items.
+space-around    -   Distribuye los espacios alrededor de los grid items.
+space-evenly    -   Distribuye los espacios alrededor y entre los grid items.   
+ */
+
+.grid-align-tracks {
+    display: grid;
+    grid-template-columns: repeat(3, 200px);
+    grid-template-rows: repeat(2, 200px);
+    justify-content: start;
+    justify-content: end;
+    justify-content: center;
+    justify-content: space-between;
+    justify-content: space-around;
+    justify-content: space-evenly;
+
+}
+
+/* 
+----------------------------------------------------------------------------
+Tamaños Mínimos y Máximos de Grid Tracks
+
+Existe una función, a la hora de definir el tamaño de los grid items, a la
+que le podemos pasar como parámetro el tamaño mínimo y el tamaño máximo que
+van a tener estos items.
+
+grid-template-columns: repeat(nro-columnas, minmax(tminimo, tmaximo));
+
+A la función minmax() se le puede pasar tanto valores definidos en alguna
+unidad posible en CSS, como la keyword min-content.
+
+min-content -   Es el tamaño mínimo de contenido, el item reducirá su tama-
+                ño hasta el mínimo tamaño posible donde quepa el contenido.
+                Luego, creará una barra de scroll.
+                Se puede usar para definir el tamaño máximo también.
+
+max-content -   Es el tamaño máximo que ocupa el contenido. El item ajustará
+                su máximo tamaño al máximo espacio ocupado por el contenido.
+                Se puede usar para definir el tamaño mínimo. No necesaria-
+                mente se usa para el tamaño máximo.
+
+
+*/
+
+.grid-min-max {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(100px, 200px));
+    grid-template-columns: repeat(4, minmax(min-content, 200px));
+    grid-template-columns: repeat(4, minmax(100px, min-content));
+    grid-template-columns: repeat(4, minmax(100px, max-content));
+    grid-template-columns: repeat(4, minmax(max-content, 200px));
+}
+
+.grid-repeat {
+    display: grid;
+    /* Filas implicitas */
+    grid-template-columns: repeat(4, 10% 20% 30% 40%);
+    grid-template-columns: repeat(3, 10% 20% 30% 40%);
+    grid-template-columns: repeat(2, 10% 20% 30% 40%);
+    grid-template-columns: repeat(1, 10% 20% 30% 40%);
+    grid-template-rows: repeat(2, 10vh 20vh);
+    grid-template-rows: repeat(2, 100px 200px);
+    grid-auto-rows: 150px;
+}
+
+/* 
+----------------------------------------------------------------------------
+Grids Dinámicas - Responsive sin Media Queries
+
+auto-fill   -   Rellena la grid con tracks generados dinámicamente.
+
+auto-fit    -   Ajusta la grid con los tracks existentes.
+
+Nota: La diferencia entre estos valores se ve inspeccionando la grid.
+*/
+
+.grid-dynamics {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    grid-template-columns: repeat(auto-fill, 100px);
+    grid-template-columns: repeat(auto-fit, 100px);
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.grid-responsive {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+/* 
+----------------------------------------------------------------------------
+Grids Anidados y Subgrids
+
+Se pueden anidar grids containers dentro de otros grids containers.
+
+Los subgrids al momento de redacción de estos apuntes, sólo están soportados
+por Firefox.
+*/
+
+.grid-nested {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+
+.subgrid {
+    /* 
+    Pasos para que la subgrid funcione:
+        1-  Definir explicitamente el tamaño que ocupará el elemento que
+            aplicará subgrid dentro del contenedor del padre grid. Es decir,
+            definir sus propiedades grid-column y grid-row.
+        2-  Aplicar display:grid al elemento que aplicará subgrid.
+        3-  Aplicar el valor de subgrid a las columnas, a las filas, o a
+            ambas depeniendo de lo que se requiera.
+    */
+    grid-column: span 3;
+    grid-row: 1 / 3;
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
 }
